@@ -60,7 +60,7 @@ async def create_assignment(
                 detail="Only teachers can create assignments"
             )
         
-        db = await get_database()
+        db = get_database()
         
         # Create assignment document
         assignment_doc = {
@@ -114,7 +114,7 @@ async def get_assignments(
     - Teachers: See assignments they created
     """
     try:
-        db = await get_database()
+        db = get_database()
         
         # Build query based on user role
         query = {}
@@ -163,7 +163,7 @@ async def get_assignment(
     Get a specific assignment by ID
     """
     try:
-        db = await get_database()
+        db = get_database()
         
         # Fetch assignment
         assignment = await db.assignments.find_one({"_id": ObjectId(assignment_id)})
@@ -207,7 +207,7 @@ async def update_assignment(
                 detail="Only teachers can update assignments"
             )
         
-        db = await get_database()
+        db = get_database()
         
         # Check if assignment exists and belongs to this teacher
         assignment = await db.assignments.find_one({
@@ -278,7 +278,7 @@ async def delete_assignment(
                 detail="Only teachers can delete assignments"
             )
         
-        db = await get_database()
+        db = get_database()
         
         # Check if assignment exists and belongs to this teacher
         assignment = await db.assignments.find_one({
@@ -329,7 +329,7 @@ async def submit_assignment(
                 detail="Only students can submit assignments"
             )
         
-        db = await get_database()
+        db = get_database()
         
         # Check if assignment exists
         assignment = await db.assignments.find_one({"_id": ObjectId(submission.assignment_id)})
@@ -395,7 +395,7 @@ async def get_my_submissions(
     Get current user's submissions
     """
     try:
-        db = await get_database()
+        db = get_database()
         
         query = {"student_id": str(current_user.id)}
         
