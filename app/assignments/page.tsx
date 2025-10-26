@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -17,83 +17,64 @@ import {
   AlertCircle,
   Moon,
   Sun,
+  Loader2,
 } from "lucide-react"
 import Link from "next/link"
 import { useTheme } from "@/components/theme-provider"
+import api from "@/lib/api"
+import { useAuth } from "@/hooks/use-auth"
 
 export default function AssignmentsPage() {
   const { theme, toggleTheme } = useTheme()
+  const { user } = useAuth()
   const [searchQuery, setSearchQuery] = useState("")
   const [filterStatus, setFilterStatus] = useState<"all" | "pending" | "completed">("all")
+  const [assignments, setAssignments] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const assignments = useMemo(() => [
-    {
-      id: 1,
-      title: "Math Problem Set - Chapter 5",
-      course: "Mathematics 101",
-      description:
-        "Complete problems 1-25 from Chapter 5 covering integration techniques including substitution, parts, and partial fractions. Show all work and include graphs where applicable.",
-      dueDate: "2025-10-27",
-      daysLeft: 2,
-      status: "pending",
-      progress: 60,
-      points: 100,
-      type: "Problem Set",
-    },
-    {
-      id: 2,
-      title: "Physics Lab Report - Newton's Laws",
-      course: "Physics 201",
-      description:
-        "Write a comprehensive lab report on the Newton's Laws experiment conducted in class. Include hypothesis, methodology, data analysis, results, and conclusion. Minimum 5 pages.",
-      dueDate: "2025-10-30",
-      daysLeft: 5,
-      status: "pending",
-      progress: 30,
-      points: 150,
-      type: "Lab Report",
-    },
-    {
-      id: 3,
-      title: "English Essay - Shakespearean Themes",
-      course: "English Literature",
-      description:
-        "Analyze the recurring themes in Shakespeare's Hamlet. Discuss the themes of revenge, madness, and mortality with specific examples from the text. Include at least 5 scholarly sources.",
-      dueDate: "2025-11-01",
-      daysLeft: 7,
-      status: "pending",
-      progress: 0,
-      points: 200,
-      type: "Essay",
-    },
-    {
-      id: 4,
-      title: "Chemistry: Periodic Table Quiz",
-      course: "Chemistry 150",
-      description:
-        "Complete the online quiz covering elements 1-36 of the periodic table. Questions will include element names, symbols, atomic numbers, and properties.",
-      dueDate: "2025-10-20",
-      daysLeft: -5,
-      status: "completed",
-      progress: 100,
-      points: 50,
-      type: "Quiz",
-      grade: "95%",
-    },
-    {
-      id: 5,
-      title: "Biology: Cell Structure Presentation",
-      course: "Biology 101",
-      description:
-        "Create a 10-minute presentation on cell structure comparing prokaryotic and eukaryotic cells. Include diagrams, examples, and real-world applications.",
-      dueDate: "2025-11-05",
-      daysLeft: 11,
-      status: "pending",
-      progress: 15,
-      points: 120,
-      type: "Presentation",
-    },
-  ], [])
+  // Fetch assignments from API
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        setLoading(true)
+        const response = await api.get('/assignments/')
+        const assignmentsData = response.data.assignments || []
+        
+        // Transform API data to match component structure
+        const transformedAssignments = assignmentsData.map((assignment: any) => {
+          const dueDate = new Date(assignment.due_date)
+          const today = new Date()
+          const daysLeft = Math.ceil((dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+          
+          return {
+            id: assignment.id,
+            title: assignment.title,
+            course: assignment.course_name || "General",
+            description: assignment.description,
+            dueDate: assignment.due_date.split('T')[0],
+            daysLeft: daysLeft,
+            status: daysLeft < 0 ? "completed" : "pending",
+            progress: 0,
+            points: assignment.points || 100,
+            type: "Assignment",
+            instructions: assignment.instructions,
+            teacher_name: assignment.teacher_name,
+          }
+        })
+        
+        setAssignments(transformedAssignments)
+      } catch (error) {
+        console.error('Failed to fetch assignments:', error)
+        setAssignments([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (user) {
+      fetchAssignments()
+    }
+  }, [user])
 
   const filteredAssignments = useMemo(() => 
     assignments.filter((assignment) => {
@@ -156,7 +137,13 @@ export default function AssignmentsPage() {
 
       {/* Filters and Search */}
       <div className="container mx-auto px-6 py-6">
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -273,12 +260,18 @@ export default function AssignmentsPage() {
           })}
         </div>
 
-        {filteredAssignments.length === 0 && (
+        {filteredAssignments.length === 0 && !loading && (
           <div className="text-center py-12">
             <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-50" />
             <p className="text-lg font-medium">No assignments found</p>
-            <p className="text-sm text-muted-foreground mt-1">Try adjusting your search or filters</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              {assignments.length === 0 
+                ? "No assignments have been created yet" 
+                : "Try adjusting your search or filters"}
+            </p>
           </div>
+        )}
+          </>
         )}
       </div>
     </div>
