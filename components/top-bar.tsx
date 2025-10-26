@@ -49,10 +49,22 @@ export function TopBar({ role }: TopBarProps) {
           <SidebarMenu role={role} />
           
           <Link href={dashboardLink} className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">E</span>
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/30 relative overflow-hidden">
+              {/* Graduation cap icon */}
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="relative z-10">
+                <path d="M12 3L2 8L12 13L22 8L12 3Z" fill="#FBBF24" opacity="0.9"/>
+                <path d="M12 3L22 8L12 13V3Z" fill="#F59E0B"/>
+                <line x1="20" y1="8" x2="20" y2="14" stroke="#FBBF24" strokeWidth="1.5" strokeLinecap="round"/>
+                <circle cx="20" cy="15" r="1" fill="#FBBF24"/>
+                <rect x="9" y="13" width="6" height="8" rx="1" fill="white" opacity="0.95"/>
+                <rect x="10" y="14.5" width="4" height="1" rx="0.5" fill="#3B82F6"/>
+                <rect x="10" y="17" width="3" height="1" rx="0.5" fill="#3B82F6"/>
+                <rect x="10" y="19.5" width="4" height="1" rx="0.5" fill="#3B82F6"/>
+              </svg>
+              {/* Shine effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
             </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 bg-clip-text text-transparent">
               EduDash
             </h1>
           </Link>

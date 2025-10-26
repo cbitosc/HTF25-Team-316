@@ -10,9 +10,14 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'EduDash - Educational Dashboard',
+  description: 'Modern educational platform for students and teachers with AI-powered learning assistance',
+  keywords: ['education', 'learning', 'assignments', 'teachers', 'students', 'AI assistant'],
+  authors: [{ name: 'HTF25-Team-316' }],
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
 }
 
 export default function RootLayout({
