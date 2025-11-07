@@ -1,0 +1,61 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with gradient -->
+  <rect width="512" height="512" rx="80" fill="url(#mainGradient)"/>
+  
+  <defs>
+    <linearGradient id="mainGradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#6366F1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Graduation Cap -->
+  <g filter="url(#shadow)">
+    <!-- Main cap board -->
+    <path d="M 256 140 L 420 190 L 256 240 L 92 190 Z" fill="#FBBF24" opacity="0.95"/>
+    <path d="M 256 140 L 420 190 L 256 240 Z" fill="#F59E0B"/>
+    
+    <!-- Cap tassel cord -->
+    <line x1="405" y1="190" x2="405" y2="270" stroke="#FBBF24" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="405" cy="280" r="12" fill="#FBBF24"/>
+    
+    <!-- Cap body/sides -->
+    <path d="M 150 190 L 150 270 Q 150 310 256 330 Q 362 310 362 270 L 362 190" fill="white" opacity="0.15"/>
+  </g>
+  
+  <!-- Letter E with book design -->
+  <g filter="url(#shadow)">
+    <!-- Book background -->
+    <rect x="190" y="250" width="132" height="180" fill="white" opacity="0.98" rx="8"/>
+    
+    <!-- E letter bars (stylized as book lines) -->
+    <rect x="210" y="280" width="92" height="18" fill="#3B82F6" rx="4"/>
+    <rect x="210" y="325" width="72" height="18" fill="#6366F1" rx="4"/>
+    <rect x="210" y="370" width="92" height="18" fill="#8B5CF6" rx="4"/>
+    
+    <!-- Book spine highlight -->
+    <rect x="194" y="254" width="6" height="172" fill="#60A5FA" opacity="0.6" rx="2"/>
+  </g>
+  
+  <!-- Decorative elements - sparkles -->
+  <circle cx="140" cy="160" r="6" fill="#FBBF24" opacity="0.8"/>
+  <circle cx="380" cy="340" r="8" fill="#60A5FA" opacity="0.7"/>
+  <circle cx="160" cy="370" r="5" fill="#A78BFA" opacity="0.8"/>
+  
+  <!-- Small stars -->
+  <path d="M 370 150 L 373 157 L 380 158 L 375 163 L 377 170 L 370 166 L 363 170 L 365 163 L 360 158 L 367 157 Z" fill="white" opacity="0.9"/>
+  <path d="M 130 330 L 132 335 L 137 336 L 133 340 L 135 345 L 130 342 L 125 345 L 127 340 L 123 336 L 128 335 Z" fill="white" opacity="0.8"/>
+</svg>
